@@ -32,16 +32,30 @@ class ViewController: UIViewController {
 
     @IBAction func numberPressed(_ sender: Any) {
         
-        let tag = (sender as! UIButton).tag
+        guard let tag = (sender as? UIButton)?.tag else {
+            //Logs
+            return
+        }
         
         if isPerformingOperation == true {
             isPerformingOperation = false
             resultLabel.text = String(tag - 1)
-            numberOnScreen = Double(resultLabel.text!)!
-        } else {
-            resultLabel.text = resultLabel.text! + String(tag - 1)
-            numberOnScreen = Double(resultLabel.text!)!
+        } else if let text = resultLabel.text{
+            resultLabel.text = text + String(tag - 1)
         }
+        
+        if let resultText = resultLabel.text, let numOnScreen = Double(resultText) {
+            numberOnScreen = numOnScreen
+        }
+        
+//        if isPerformingOperation == true {
+//            isPerformingOperation = false
+//            resultLabel.text = String(tag - 1)
+//            numberOnScreen = Double(resultLabel.text!)!
+//        } else {
+//            resultLabel.text = resultLabel.text! + String(tag - 1)
+//            numberOnScreen = Double(resultLabel.text!)!
+//        }
     }
     @IBAction func operatorPressed(_ sender: Any) {
         
@@ -58,27 +72,22 @@ class ViewController: UIViewController {
         
         //operator +(14) -(13) /(11) x(12) = (15)*/
         
-        if tag == 11 {
-            isPerformingOperation = true
-            previousNumber = Double(resultLabel.text!)!
-            resultLabel.text = "/"
+        if (tag == 11 || tag == 12 || tag == 13 || tag == 14) {
             operation = tag
-        } else if tag == 12 {
             isPerformingOperation = true
             previousNumber = Double(resultLabel.text!)!
-            resultLabel.text = "*"
-             operation = tag
-        } else if tag == 13 {
-            isPerformingOperation = true
-            previousNumber = Double(resultLabel.text!)!
-            resultLabel.text = "-"
-            operation = tag
-        } else if tag == 14 {
-            isPerformingOperation = true
-            previousNumber = Double(resultLabel.text!)!
-            resultLabel.text = "+"
-             operation = tag
-        } else if tag == 15 {
+            
+             if tag == 11 {
+                resultLabel.text = "/"
+            } else if tag == 12 {
+                resultLabel.text = "*"
+            } else if tag == 13 {
+                resultLabel.text = "-"
+            } else if tag == 14 {
+                resultLabel.text = "+"
+            }
+        }
+        if tag == 15 {
             if operation == 11 {
                 resultLabel.text = String(previousNumber / numberOnScreen)
             } else if operation == 12 {
@@ -90,7 +99,6 @@ class ViewController: UIViewController {
             }
         }
     }
-    
 }
 
  
